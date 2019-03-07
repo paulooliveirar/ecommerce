@@ -1,4 +1,4 @@
-<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html>
+<?php if(!class_exists('Rain\Tpl')){exit;}?>﻿<!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -16,7 +16,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Theme style -->''
+  <!-- Theme style -->
   <link rel="stylesheet" href="/res/admin/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
@@ -60,9 +60,9 @@ desired effect
     <!-- Logo -->
     <a href="/res/admin/index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini"><b>S</b>T</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <span class="logo-lg"><b>Store</b>Tech</span>
     </a>
 
     <!-- Header Navbar -->
@@ -176,7 +176,7 @@ desired effect
               <!-- The user image in the navbar-->
               <img src="/res/admin/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">Alexander Pierce</span>
+              <span class="hidden-xs"><?php echo getUserName(); ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
@@ -184,24 +184,9 @@ desired effect
                 <img src="/res/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <?php echo getUserName(); ?>
+                  <small>Membro desde <?php echo format_date(getDateRegister()); ?></small>
                 </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                <!-- /.row -->
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
@@ -234,7 +219,7 @@ desired effect
           <img src="/res/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p><?php echo getUserName(); ?></p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
@@ -243,7 +228,7 @@ desired effect
       <!-- search form (Optional) -->
       <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
+          <input type="text" name="q" class="form-control" placeholder="Pesquisar...">
               <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
@@ -254,10 +239,24 @@ desired effect
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
-        <li class="header">HEADER</li>
+        <li class="header">MENU PRINCIPAL</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-        <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+        <li class="active"><a href="/admin/users"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
+        <li><a href="/admin/categories"><i class="fa fa-list-alt"></i> <span>Categorias</span></a></li>
+        <li><a href="/admin/products"><i class="fa fa-tags"></i> <span>Produtos</span></a></li>
+        <li><a href="/admin/orders"><i class="fa fa-shopping-basket"></i><span>Pedidos</span></a></li>
+        <li class="treeview">
+          <a href="#"><i class="fa fa-paint-brush"></i> <span>Visual da Loja</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#"><i class="fa fa-picture-o"></i> Banners</a></li>
+            <li><a href="#"><i class="fa fa-th"></i> Produtos em Destaque</a></li>
+            <li><a href="#"></a></li>
+          </ul>
+        </li>
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
             <span class="pull-right-container">
@@ -274,5 +273,3 @@ desired effect
     </section>
     <!-- /.sidebar -->
   </aside>
-
- 

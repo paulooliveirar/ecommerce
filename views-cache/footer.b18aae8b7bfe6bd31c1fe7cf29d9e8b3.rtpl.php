@@ -4,10 +4,10 @@
   <footer class="main-footer">
     <!-- To the right -->
     <div class="pull-right hidden-xs">
-      Anything you want
+      Plataforma Ecommerce Store Tech V1.0
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2016 <a href="http://orbittech.com.br" target="_blank">OrbitTech - Soluções em TI</a></strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->
