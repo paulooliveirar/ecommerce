@@ -4940,3 +4940,123 @@ table.text-center th {
     white-space: normal !important;
   }
 }
+
+.icon-box {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 50%;
+    z-index: 9;
+    text-align: center;
+    border: 3px solid #f15e5e;
+}
+
+.modal-confirm h4 {
+    text-align: center;
+    font-size: 26px;
+    margin: 30px 0 -10px;
+}
+
+.modal-confirm .modal-body {
+    color: #999;
+}
+
+.modal-body {
+    position: relative;
+    padding: 15px;
+}
+
+.modal-confirm .modal-content {
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+}
+
+.modal-content {
+    -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+}
+
+.modal-confirm .modal-footer {
+    border: none;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 13px;
+    padding: 10px 15px 25px;
+}
+.modal-confirm .modal-body {
+    color: #999;
+    text-align: center;
+}
+
+.modal-body {
+    position: relative;
+    padding: 15px;
+}
+.modal-header{
+  border:none;
+}
+
+.modal-title{
+  margin-top: 10px;
+}
+
+.modal-confirm h4 {
+  text-align: center;
+  margin:10px;
+  font-size:18px;
+}
+.wysihtml5-toolbar li{
+  display: inline-block;
+}
+.widget-payment .widget-payment-header {
+    padding: 20px;
+    height: 190px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+.widget-payment .widget-payment-image {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.widget-payment .widget-payment-username {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 25px;
+    font-weight: 300;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.widget-payment .widget-payment-desc {
+    margin-top: 0;
+}
+
+.widget-payment .widget-payment-image > img {
+    width: 128px;
+    height: auto;
+    border: 4px solid #FFFFFF;
+    padding: 5px;
+}
+
+.widget-payment .img-circle {
+    border-radius: 50%;
+    background: #FFFFFF;
+}
+
+.waiting, .waiting .widget-payment-header{
+  background: #999 !important;
+}
+
+.waiting .widget-payment-image img,.waiting .box-footer{
+  filter:grayscale(1);
+}
+
+.waiting:hover .widget-payment-image img{
+  filter:grayscale(0);
+}

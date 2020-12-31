@@ -1,0 +1,96 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Dados da Loja
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <div class="row">
+     <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Editar Produto</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->     
+        <form role="form" action="/admin/data-store/update" method="post" enctype="multipart/form-data">
+          <div class="box-body">
+            {if="$error != ''"}
+            <div class="alert alert-danger">
+              {$error}
+            </div>              
+            {/if} 
+
+            {if="$success != ''"}
+            <div class="alert alert-success">
+              {$success}              
+            </div>
+            {/if}               
+            <div class="form-group">
+              <label for="desname">Razão Social</label>
+              <input type="text" class="form-control" id="desname" name="desname" placeholder="Digite o nome do produto" value="{$conf.desname}">
+            </div>
+            <div class="form-group">
+              <label for="desurl">URL</label>
+              <input type="text" class="form-control" id="desurl" name="desurl" placeholder="minhalojavirtual.com.br" value="{$conf.desurl}">
+            </div>
+            <div class="form-group">
+              <label for="descnpj_cpf">CPNJ/CPF</label>
+              <input type="text" class="form-control" id="descnpj_cpf" name="descnpj_cpf" placeholder="000.000.000-00" value="{$conf.descnpj_cpf}">
+            </div>
+            <div class="form-group">
+              <label for="desphone">Telefone</label>
+              <input type="tel" class="form-control" id="desphone" name="desphone" placeholder="(11)1234-5678" value="{$conf.desphone}">
+            </div>
+            <div class="form-group">
+              <label for="desemail">Email Comercial</label>
+              <input type="email" class="form-control" id="desemail" name="desemail" placeholder="email@email.com.br" value="{$conf.desemail}">
+            </div>
+            <div class="form-group">
+              <label for="deszipcode">CEP</label>
+              <input type="text" class="form-control" id="deszipcode" name="deszipcode" placeholder="0000-000" value="{$conf.deszipcode}" maxlength="8">
+            </div>
+            <div class="form-group">
+              <label for="descountry">País</label>
+              <input type="text" class="form-control" id="descountry" name="descountry" placeholder="Brasil" value="{$conf.descountry}">
+            </div>
+            <div class="form-group">
+              <label for="desstate">Estado</label>
+              <input type="text" class="form-control" id="desstate" name="desstate" placeholder="São Paulo" value="{$conf.desstate}">
+            </div>
+            <div class="form-group">
+              <label for="descity">Cidade</label>
+              <input type="text" class="form-control" id="descity" name="descity" placeholder="São Paulo" value="{$conf.descity}">
+            </div>
+            <div class="form-group col-md-8 no-padding">
+              <label for="desaddress">Endereço</label>
+              <input type="text" class="form-control" id="desaddress" name="desaddress" placeholder="Rua dos Desejos" value="{$conf.desaddress}">
+            </div>
+            <div class="form-group col-md-4" style="padding-right: 0">
+              <label for="desnumber">Número</label>
+              <input type="text" class="form-control" id="desnumber" name="desnumber" placeholder="500" value="{$conf.desnumber}">
+            </div>
+            <div class="form-group">
+              <label for="descomplement">Complemento</label>
+              <input type="text" class="form-control" id="descomplement" name="descomplement" value="{$conf.descomplement}">
+            </div>            
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

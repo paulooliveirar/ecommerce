@@ -1,0 +1,83 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Editar Dados do {$shipping.desname} 
+      <small>
+        ({$shipping.descompany}) - Status: 
+        {if="$shipping.inactive === '0'"}
+        <i class="fa fa-circle text-danger"></i> DESATIVADO
+        {/if}
+        {if="$shipping.inactive === '1'"}
+        <i class="fa fa-circle text-success"></i> ATIVADO
+        {/if}            
+      </small> 
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <div class="row">
+     <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            <img class="img-circle" src='../../res/admin/dist/img/shipping/{function="getNamePayment($shipping.desname)"}.png' alt="{$shipping.desname}">
+
+          </h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->     
+        <form role="form" action="/admin/methods-shipping/update" method="post" enctype="multipart/form-data">
+          <div class="box-body">
+            {if="$error != ''"}
+            <div class="alert alert-danger">
+              {$error}
+            </div>              
+            {/if} 
+
+            {if="$success != ''"}
+            <div class="alert alert-success">
+              {$success}              
+            </div>
+            {/if}
+            <small> Status: 
+              {if="$shipping.inactive === '1'"}
+              <i class="fa fa-circle text-success"></i> ATIVADO
+              {/if}
+              {if="$shipping.inactive === '0'"}
+              <i class="fa fa-circle text-danger"></i> DESATIVADO
+              {/if}  
+            </small>
+            
+        {if="$shipping.idshipping === '1' OR $shipping.idshipping === '2'"}
+        <h3>Medidas e Dimensões</h3>        
+        <small>Fonte: <a href="https://www.correios.com.br/a-a-z/limites-de-dimensoes-e-peso" target="_blank">https://www.correios.com.br/a-a-z/limites-de-dimensoes-e-peso</a></small>
+        {/if}
+
+        <h3>Contrato</h3>
+        <div class="form-group">
+          <label for="deslogin">Login</label>
+          <input type="text" class="form-control" id="deslogin" name="deslogin" value="{$shipping.deslogin}">
+        </div>
+        <div class="form-group">
+          <label for="despassword">Senha</label>
+          <input type="password" class="form-control" id="despassword" name="despassword" value="{$shipping.despassword}">
+        </div>            
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="/admin/methods-shipping"><button type="button" class="btn btn-primary">Cancelar</button></a>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

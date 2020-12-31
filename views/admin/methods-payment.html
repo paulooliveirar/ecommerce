@@ -1,0 +1,91 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Métodos de Pagamento
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active"><a href="/admin/orders">Métodos de Pagamento</a></li>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <div class="row">
+     <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header">
+        </div>
+
+        <div class="box-body no-padding">
+        {loop="$payment"}
+          <div class="col-md-3">
+            <!-- Widget: user widget style 1 -->
+           {if="$value.inactive != '2'"}
+              <div class="box box-widget widget-payment">
+            {/if}
+            {if="$value.inactive === '2'"}
+              <div class="box box-widget widget-payment waiting">
+            {/if}
+              <!-- Add the bg color to the header using any of the bg-* classes -->
+              <div class="widget-payment-header bg-yellow">
+                <h3 class="widget-payment-username">{$value.desname}</h3>
+                <h5 class="widget-payment-desc">{$value.descompany}</h5>
+              </div>
+              <div class="widget-payment-image">
+                <img class="img-circle" src='../res/admin/dist/img/payment/{function="getNamePayment($value.desname)"}.png' alt="{$value.desname}">
+              </div>
+              <div class="box-footer">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="description-block">
+                        {if="$value.inactive === '0'"}
+                        <p class="text-center">Status: <i class="fa fa-circle text-danger"></i> DESATIVADO</p>
+                        <a href="/admin/methods-payment/{$value.idmethod}-{$value.inactive}" class="btn btn-success" onclick="return confirm('Tem certeza que deseja ATIVAR esse método de Pagamento')">
+                          <i class="fa fa-toggle-on"></i>                        
+                          Ativar
+                        </a>
+                        <a href="/admin/methods-payment/{$value.idmethod}" class="btn btn-default">
+                          <i class="fa fa-edit"></i> Configurar
+                        </a>                        
+                        {/if}
+                        {if="$value.inactive === '1'"}
+                        <p class="text-center">Status: <i class="fa fa-circle text-success"></i> ATIVADO</p>
+                        <a href="/admin/methods-payment/{$value.idmethod}-{$value.inactive}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja DESATIVAR esse método de Pagamento')">
+                          <i class="fa fa-toggle-off"></i>
+                          Desativar
+                        </a>
+                        <a href="/admin/methods-payment/{$value.idmethod}" class="btn btn-default">
+                          <i class="fa fa-edit"></i> Configurar
+                        </a>                        
+                        {/if}
+                        {if="$value.inactive === '2'"}
+                        <p class="text-center">Status: <i class="fa fa-circle text-warning"></i> EM BREVE</p>
+                        <a class="btn btn-warning">
+                          <i class="fa fa-coffee" aria-hidden="true"></i>
+                          Em Breve
+                        </a>
+                        {/if}
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                </div>
+                <!-- /.row -->
+              </div>
+            </div>
+            <!-- /.widget-user -->
+          </div>
+        {/loop}
+        </div>
+        <!-- /.box-body -->
+      </div>
+    </div>
+  </div>
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

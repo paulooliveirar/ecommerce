@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Minha Loja Virtual</title>
+    <title>{function="getNameStore()"}</title>
     
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
@@ -31,6 +31,17 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <script>
+        window.scripts = [];
+    </script>
+    <!-- TAGs Google -->
+        {function="googleAnalytics()"}
+
+        {function="googleTAGManager()"}
+    <!-- End TAGs Google -->
+
+    {function="chatTawkTo()"}
   </head>
   <body>
    
@@ -40,14 +51,19 @@
                 <div class="col-md-8">
                     <div class="user-menu">
                         <ul>
-                            <li><a href="/profile"><i class="fa fa-user"></i> Minha Conta</a></li>
-                            <li><a href="#"><i class="fa fa-heart"></i> Lista de Desejos</a></li>
-                            <li><a href="/cart"><i class="fa fa-shopping-cart"></i> Meu Carrinho</a></li>
                             {if="checkLogin(false)"}
-                            <li><a href="/profile"><i class="fa fa-user"></i>{function="getUserName()"}</a></li>
-                            <li><a href="/logout"><i class="fa fa-close"></i> Sair</a></li>
+                            <li><a href="/profile"> <i class="fa fa-user"></i>{function="getUserName()"}</a></li>
                             {else}
-                            <li><a href="/login"><i class="fa fa-lock"></i> Login</a></li>
+                            <li><a href="/profile"> <i class="fa fa-user"></i>Visitante</a></li>
+                            {/if}
+                            
+                            <li><a href="#"> <i class="fa fa-heart"></i>Lista de Desejos</a></li>
+                            <li><a href="/cart"> <i class="fa fa-shopping-cart"></i>Meu Carrinho</a></li>
+                            
+                            {if="checkLogin(false)"}
+                            <li><a href="/logout"> <i class="fa fa-sign-out"></i>Sair</a></li>
+                            {else}
+                            <li><a href="/login"> <i class="fa fa-lock"></i>Login</a></li>
                             {/if}
                         </ul>
                     </div>
@@ -57,7 +73,10 @@
                     <div class="header-right">
                         <ul class="list-unstyled list-inline">
                             <li class="dropdown dropdown-small">
-                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">moeda :</span><span class="value">BRL </span><b class="caret"></b></a>
+                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                    <span class="value">BRL </span><b class="caret"></b>
+                                </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#">BRL</a></li>
                                     <li><a href="#">USD</a></li>
@@ -65,8 +84,10 @@
                             </li>
 
                             <li class="dropdown dropdown-small">
-                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">linguagem :</span><span class="value">Português </span><b class="caret"></b></a>
-                                <ul class="dropdown-menu">
+                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="fa fa-language" aria-hidden="true"></i>
+                                    <span class="value">Português </span><b class="caret"></b></a>
+                                <ul class="dropdown-menu" id="lag">
                                     <li><a href="#">Português</a></li>
                                     <li><a href="#">Inglês</a></li>
                                     <li><a href="#">Espanhol</a></li>
@@ -111,8 +132,12 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="/">Home</a></li>
-                        <li><a href="/pro">Produtos</a></li>
-                        <li><a href="/cart">Carrinho</a></li>
+                        <li><a href="/quem-somos">Quem Somos</a></li>
+                        <li><a href="/products">Categorias</a></li>
+                        <li><a href="/brand">Marcas</a></li>
+                        <li><a href="/products">Produtos</a></li>                        
+                        <li><a href="/contato">Contato</a></li>
+
                     </ul>
                 </div>  
             </div>

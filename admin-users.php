@@ -15,7 +15,7 @@ $app->get('/admin/users/:iduser/password', function($iduser) {
 	$page->setTpl("users-password", array(
 		"user"=>$user->getValues(),		
 		"msgError"=>User::getError(),
-		"msgSuccess"=>User::getSucess()
+		"msgSuccess"=>User::getSuccess()
 	));
 });
 
@@ -49,7 +49,7 @@ $app->post('/admin/users/:iduser/password', function($iduser) {
 
 	$user->setPassword(User::getPasswordHash($_POST['despassword']));
 
-	User::setSucess("Senha alterada com sucesso!");
+	User::setSuccess("Senha alterada com Successo!");
 
 	header("Location: /admin/users/" . $iduser . "/password");
 	exit;
@@ -61,11 +61,14 @@ $app->get('/admin/users', function() {
 
 	$search = (isset($_GET['search'])) ? $_GET['search']: "";
 	$page = (isset($_GET['page'])) ? $_GET['page']: 1;
+	$userspage = (isset($_GET['users-page']) && $_GET['users-page'] != "") ? $_GET['users-page']: 15;
+
+	$allusers = count(User::listAll());	
 
 	if($search != ""){
-		$pagination = User::getUsersPageSearch($search, $page);
+		$pagination = User::getUsersPageSearch($search, $page, $userspage);
 	} else{
-		$pagination = User::getUsersPage($page);
+		$pagination = User::getUsersPage($page, $userspage);
 	}
 
 	//$pagination = User::getUsersPage($page, passar o número máximo por página);
@@ -86,7 +89,9 @@ $app->get('/admin/users', function() {
 	$page->setTpl("users", array(
 		"users"=>$pagination['data'],
 		"search"=>$search,
-		"pages"=>$pages
+		"pagination"=>$userspage,
+		"pages"=>$pages,
+		"allusers"=> $allusers		
 	));
 
 
@@ -169,7 +174,29 @@ $app->post('/admin/users/:iduser', function($iduser){
 
 	$user->update();
 
+	$user->setPhoto($_FILES["file"]);	
+
 	header("Location: /admin/users");
+	exit;
+
+});
+
+$app->post('/admin/user-profile/:iduser', function($iduser){
+
+	User::verifyLogin();
+
+	$user = new User();
+
+	$user->get((int)$iduser);
+
+	$page = new PageAdmin();
+
+	$page->setTpl("user-profile", array(
+		"user"=>$user->getValues(),		
+		"msgError"=>User::getError(),
+		"msgSuccess"=>User::getSuccess()
+	));	
+
 	exit;
 
 });

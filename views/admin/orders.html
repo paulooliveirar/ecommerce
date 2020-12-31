@@ -17,8 +17,17 @@
   <div class="row">
   	<div class="col-md-12">
   		<div class="box box-primary">
-
           <div class="box-header">
+              <form action="/admin/orders">
+                Total de Resultados Exibidos por Página:  {$pagination}
+                <div class="input-group input-group-sm" style="width: 80px;">
+                  <input type="text" name="orders-page" class="form-control pull-left" value="{$pagination}">
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default">Ver</button>
+                  </div>
+                </div>
+              </form>
+
             <div class="box-tools">
                 <form action="/admin/orders">
                   <div class="input-group input-group-sm" style="width: 150px;">
@@ -67,6 +76,10 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
+              <div class="pull-left">
+                <b>Total de Registros:</b> {$allorders} pedidos
+              </div>
+
               <ul class="pagination pagination-sm no-margin pull-right">
                 {loop="$pages"}
                 <li><a href="{$value.href}">{$value.text}</a></li>

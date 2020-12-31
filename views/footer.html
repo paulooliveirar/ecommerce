@@ -4,8 +4,8 @@
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="footer-about-us">
-                        <h2>Hcode Store</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis sunt id doloribus vero quam laborum quas alias dolores blanditiis iusto consequatur, modi aliquid eveniet eligendi iure eaque ipsam iste, pariatur omnis sint! Suscipit, debitis, quisquam. Laborum commodi veritatis magni at?</p>
+                        <h2 class="footer-wid-title">{function="getNameStore()"}</h2>
+                        <p>Empresa focado em inovações em vastos setores comerciais, sempre buscando a forma mais ágil e simples de fazer a diferença no contiadiano das pessoas. Venha já conhecer nossos trabalhos e saber como podemos ajudar a você crescer!</p>
                         <div class="footer-social">
                             <a href="https://www.facebook.com/hcodebr" target="_blank"><i class="fa fa-facebook"></i></a>
                             <a href="https://twitter.com/hcodebr" target="_blank"><i class="fa fa-twitter"></i></a>
@@ -55,24 +55,30 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="copyright">
-                        <p>&copy; 2017 Hcode Treinamentos. <a href="http://www.hcode.com.br" target="_blank">hcode.com.br</a></p>
+                        {function="getInfoFooter()"}
                     </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="footer-card-icon">
-                        <i class="fa fa-cc-discover"></i>
-                        <i class="fa fa-cc-mastercard"></i>
-                        <i class="fa fa-cc-paypal"></i>
-                        <i class="fa fa-cc-visa"></i>
+                        <h4>Meios de Pagamento</h4>
+                        <img src="../res/site/img/pagseguro.png"/>
                     </div>
                 </div>
             </div>
+            <div class="row text-center">
+                Desenvolvido pelo empresa <a href="http://www.orbittech.com.br" target="_blank">OrbitTech - Soluções em TI.</a> <br>
+                Plataforma Ecommerce Store Tech V1.0
+            </div>            
         </div>
     </div> <!-- End footer bottom area -->
    
     <!-- Latest jQuery form server -->
     <script src="https://code.jquery.com/jquery.min.js"></script>
+
+
+    <!-- Handlebars -->
+    <script src="/res/site/js/handlebars-v4.0.10.js"></script>
     
     <!-- Bootstrap JS form CDN -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -90,5 +96,29 @@
     <!-- Slider -->
     <script type="text/javascript" src="/res/site/js/bxslider.min.js"></script>
 	<script type="text/javascript" src="/res/site/js/script.slider.js"></script>
+
+    <script>
+        $('.rating-star').click(function() {
+            $(this).parents('.rating').find('.rating-star').removeClass('checked');
+            $(this).addClass('checked');
+                
+            var submitStars = $(this).attr('data-value');
+            alert(submitStars);
+        });
+                
+        $(function(){
+            if (scripts instanceof Array){
+                $.each(scripts, function(index, fn){
+                    if(typeof fn === 'function'){
+                        fn();
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Chat Start -->
+    
+    <!-- Chat End -->
   </body>
 </html>

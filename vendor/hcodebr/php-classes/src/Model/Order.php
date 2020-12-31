@@ -5,11 +5,15 @@ namespace Hcode\Model;
 use \Hcode\DB\Sql;
 use \Hcode\Model;
 use \Hcode\Model\Cart;
+use \Hcode\Model\User;
+use \Hcode\Model\Address;
+
 
 class Order extends Model {
 
-	const SUCESS = "Order-Success";
+	const SUCCESS = "Order-Success";
 	const ERROR = "Order-Error";
+	const SESSION = "Order-Session";
 
 	public function save(){
 
@@ -25,6 +29,7 @@ class Order extends Model {
 		]);
 
 		if(count($results) > 0){
+			User::createLog("Novo pedido salvo com sucesso");			
 			$this->setData($results[0]);
 		}
 
@@ -34,13 +39,21 @@ class Order extends Model {
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * 
+		$results = $sql->select("SELECT 
+				a.idorder, a.idcart, a.idcart, a.iduser, a.idstatus, a.idaddress, a.vltotal, a.dtregister,
+				b.desstatus,
+				c.dessessionid, c.deszipcode, c.vlfreight, c.nrdays,
+				d.idperson, d.deslogin,
+				e.desaddress, e.desnumber, e.descomplement, e.descity, e.desstate, e.descountry, e.deszipcode, e.desdistrict,
+				f.desperson, f.desemail, f.nrphone,
+				g.descode, g.vlgrossamount, g.vldiscountamount, g.vlfeeamount, g.vlnetamount, g.vlextraamount, g.despaymentlink 
 			FROM tb_orders a 
 			INNER JOIN tb_ordersstatus b USING(idstatus) 
 			INNER JOIN tb_carts c USING(idcart)
 			INNER JOIN tb_users d ON d.iduser = a.iduser 
 			INNER JOIN tb_addresses e USING (idaddress) 
 			INNER JOIN tb_persons f ON f.idperson = d.idperson
+			LEFT JOIN tb_orderspagseguro g ON g.idorder = a.idorder
 			WHERE a.idorder = :idorder", [
 				":idorder"=>$idorder
 			]);
@@ -65,12 +78,61 @@ class Order extends Model {
 			ORDER BY a.dtregister DESC ");
 	}
 
+
+	public static function totalPay(){
+
+		$sql = new Sql();
+
+		return $sql->select("SELECT * 
+			FROM tb_orders a 
+			INNER JOIN tb_ordersstatus b USING(idstatus) 
+			INNER JOIN tb_carts c USING(idcart)
+			INNER JOIN tb_users d ON d.iduser = a.iduser 
+			INNER JOIN tb_addresses e USING (idaddress) 
+			INNER JOIN tb_persons f ON f.idperson = d.idperson
+			WHERE a.idstatus = 3
+			ORDER BY a.dtregister DESC ");
+	}
+
+
+	public static function totalPendent(){
+
+		$sql = new Sql();
+
+		return $sql->select("SELECT * 
+			FROM tb_orders a 
+			INNER JOIN tb_ordersstatus b USING(idstatus) 
+			INNER JOIN tb_carts c USING(idcart)
+			INNER JOIN tb_users d ON d.iduser = a.iduser 
+			INNER JOIN tb_addresses e USING (idaddress) 
+			INNER JOIN tb_persons f ON f.idperson = d.idperson
+			WHERE a.idstatus = 1 OR a.idstatus = 2
+			ORDER BY a.dtregister DESC ");
+	}
+
+	public static function totalPayRecused(){
+
+		$sql = new Sql();
+
+		return $sql->select("SELECT * 
+			FROM tb_orders a 
+			INNER JOIN tb_ordersstatus b USING(idstatus) 
+			INNER JOIN tb_carts c USING(idcart)
+			INNER JOIN tb_users d ON d.iduser = a.iduser 
+			INNER JOIN tb_addresses e USING (idaddress) 
+			INNER JOIN tb_persons f ON f.idperson = d.idperson
+			WHERE a.idstatus = 5
+			ORDER BY a.dtregister DESC ");
+	}	
+
 	public function delete(){
 		$sql = new Sql();
 
 		$sql->query("DELETE FROM tb_orders WHERE idorder = :idorder", [
 			":idorder"=>$this->getidorder()
-		]);		
+		]);
+
+		User::createLog("Pedido Excluído com Sucesso");		
 	}
 
 	public function getCart():Cart{
@@ -98,21 +160,21 @@ class Order extends Model {
 	}
 
 
-	public static function setSucess($msg){
-		$_SESSION[Order::SUCESS] = $msg;
+	public static function setSuccess($msg){
+		$_SESSION[Order::SUCCESS] = $msg;
 	}
 
-	public static function getSucess(){
-		$msg = (isset($_SESSION[Order::SUCESS])) ? $_SESSION[Order::SUCESS] : "";
-		Order::cleanSucess();
+	public static function getSuccess(){
+		$msg = (isset($_SESSION[Order::SUCCESS])) ? $_SESSION[Order::SUCCESS] : "";
+		Order::cleanSuccess();
 		return $msg;
 	}
 
-	public static function cleanSucess(){
-		$_SESSION[Order::SUCESS] = NULL;
+	public static function cleanSuccess(){
+		$_SESSION[Order::SUCCESS] = NULL;
 	}	
 
-	public static function getUsersPage($page = 1, $itemsPerPage = 10){
+	public static function getOrdersPage($page = 1, $itemsPerPage = 15){
 		
 		$start = ($page-1) * $itemsPerPage;
 
@@ -135,7 +197,7 @@ class Order extends Model {
 		];
 	}
 
-	public static function getUsersPageSearch($search, $page = 1, $itemsPerPage = 15){
+	public static function getOrdersPageSearch($search, $page = 1, $itemsPerPage = 15){
 		
 		$start = ($page-1) * $itemsPerPage;
 
@@ -163,6 +225,47 @@ class Order extends Model {
 			'pages'=>ceil($resultTotal[0]["nrtotal"]/$itemsPerPage)
 		];
 	}	
+
+	public function toSession(){
+		$_SESSION[Order::SESSION] = $this->getValues();
+	}
+
+	public static function verifySession(){	
+		if(isset($_SESSION[Order::SESSION])){
+			return true;
+		}
+		return false;
+	}
+
+	public function getFromSession(){
+		$this->setData($_SESSION[Order::SESSION]);
+	}
+
+	public function getAddress():Address{
+		
+		$address = new Address();
+
+		$address->setData($this->getValues());
+
+		return $address;
+
+	}
+
+	public function setPagSeguroTransactionResponse(string $descode, float $vlgrossamount, float $vldiscountamount, float $vlfeeamount, float $vlnetamount, float $vlextraamount, string $despaymentlink = ""){
+
+		$sql = new Sql();
+
+		$sql->query("CALL sp_orderspagseguro_save(:idorder, :descode, :vlgrossamount, :vldiscountamount, :vlfeeamount, :vlnetamount, :vlextraamount, :despaymentlink)", [
+				':idorder'=>$this->getidorder(),
+				':descode'=>$descode,
+				':vlgrossamount'=>$vlgrossamount,
+				':vldiscountamount'=>$vldiscountamount,
+				':vlfeeamount'=>$vlfeeamount,
+				':vlnetamount'=>$vlnetamount,
+				':vlextraamount'=>$vlextraamount,
+				':despaymentlink'=>$despaymentlink
+		]);
+	}
 
 }
 

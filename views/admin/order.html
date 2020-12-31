@@ -28,11 +28,11 @@
             <div class="col-sm-4 invoice-col">
             De
             <address>
-                <strong>HCODE</strong><br>
-                Rua Ademar Saraiva Leão, 234 - Alvarenga<br>
-                São Bernardo do Campo - SP<br>
-                Telefone: (11) 3171-3080<br>
-                E-mail: suporte@hcode.com.br
+                <strong>{$conf.desname}</strong><br>
+                {$conf.desaddress}, {$conf.descomplement} - {$conf.deszipcode}<br>
+                {$conf.descity} - {$conf.desstate} - {$conf.descountry}<br>
+                {if="$conf.desphone && $conf.desphone!='0'"}Telefone: {$conf.desphone}<br>{/if}
+                Email: {$conf.desemail}
             </address>
             </div>
             <!-- /.col -->
@@ -40,7 +40,7 @@
             Para
             <address>
                 <strong>{$order.desperson}</strong><br>
-                {$order.desaddress}, {$order.descomplement}<br>
+                {$order.desaddress}, {$order.desnumber} {if="$order.descomplement && $$order.descomplement!=''"}- {$order.descomplement}<br>{/if}<br>
                 {$order.descity} - {$order.desstate}<br>
                 {if="$order.nrphone && $order.nrphone!='0'"}Telefone: {$order.nrphone}<br>{/if}
                 E-mail: {$order.desemail}
@@ -95,7 +95,12 @@
                     <tbody>
                     <tr>
                         <th style="width:180px;">Método de Pagamento:</th>
-                        <td>Boleto</td>
+                        <td>
+                            {if="$order.idstatus==='1'"}Em Aberto{/if}
+                            {if="$order.idstatus==='2'"}Aguardando Pagamento{/if}
+                            {if="$order.idstatus==='3'"}Pago{/if}
+                            {if="$order.idstatus==='4'"}Entregue{/if}
+                        </td>
                     </tr>
                     <tr>
                         <th>Parcelas:</th>
@@ -143,7 +148,7 @@
                     <i class="fa fa-pencil"></i> Editar Status
                 </button>
                 <button type="button" onclick="window.open('/boleto/{$order.idorder}')" class="btn btn-default pull-left" style="margin-left: 5px;">
-                    <i class="fa fa-barcode"></i> Boleto
+                    <i class="fa fa-barcode"></i> Fazer Pagamento
                 </button>
 
                 

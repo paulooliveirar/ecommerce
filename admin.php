@@ -5,8 +5,10 @@ use \Hcode\Model\User;
 
 $app->get('/admin', function() {
 	User::verifyLogin();
+
 	$page = new PageAdmin();
-	$page->setTpl("index");	
+	$page->setTpl("index");
+
 });
 
 $app->get('/admin/login', function() {
@@ -99,6 +101,18 @@ $app->post("/admin/forgot/reset",function(){
 	$page->setTpl("forgot-reset-success");
 });
 
+$app->get("/admin/delete-cache", function(){
+
+	$files = glob('views-cache/*'); 
+	foreach($files as $file){
+	    if(is_file($file))
+	    unlink($file); 
+	}
+
+	header("Location: " . $_SERVER['HTTP_REFERER']);
+	exit;
+
+});
 
 
 ?>

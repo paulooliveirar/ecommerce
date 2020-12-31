@@ -10,11 +10,14 @@ $app->get("/admin/products", function(){
 
 	$search = (isset($_GET['search'])) ? $_GET['search']: "";
 	$page = (isset($_GET['page'])) ? $_GET['page']: 1;
+	$productspage = (isset($_GET['products-page']) && $_GET['products-page'] != "") ? $_GET['products-page']: 15;
+
+	$allproducts = count(Product::listAll());	
 
 	if($search != ""){
-		$pagination = Product::getUsersPageSearch($search, $page);
+		$pagination = Product::getProductsPageSearch($search, $page, $allproducts);
 	} else{
-		$pagination = Product::getUsersPage($page);
+		$pagination = Product::getProductsPage($page, $allproducts);
 	}
 
 	//$pagination = User::getUsersPage($page, passar o número máximo por página);
@@ -36,7 +39,9 @@ $app->get("/admin/products", function(){
 	$page->setTpl("products", array(
 		"products"=>$pagination['data'],
 		"search"=>$search,
-		"pages"=>$pages
+		"pagination"=>$productspage,
+		"pages"=>$pages,
+		"allproducts"=> $allproducts
 	));
 });
 

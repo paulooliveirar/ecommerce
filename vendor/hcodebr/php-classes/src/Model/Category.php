@@ -4,6 +4,7 @@ namespace Hcode\Model;
 
 use \Hcode\DB\Sql;
 use \Hcode\Model;
+use \Hcode\Model\User;
 use \Hcode\Mailer;
 
 class Category extends Model {
@@ -16,6 +17,8 @@ class Category extends Model {
 	}
 
 	public function save(){
+		
+		User::createLog("Categoria salva com sucesso");
 
 		$sql = new Sql();
 		
@@ -41,7 +44,11 @@ class Category extends Model {
 	}
 
 	public function delete(){
+
+		User::createLog("Categoria excluída com sucesso");
+
 		$sql = new Sql();
+		
 		$sql->query("DELETE FROM tb_categories WHERE idcategory = :idcategory" , array(
 			":idcategory"=>$this->getidcategory()
 		));
@@ -59,7 +66,7 @@ class Category extends Model {
 			array_push($html, '<li><a href="/categories/' . $row["idcategory"] . '">' . $row["descategory"] . '</a></li>');
 		}
 
-file_put_contents($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "categories-menu.html", implode('', $html));
+		file_put_contents($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "categories-menu.html", implode('', $html));
 	}
 
 	public function getProducts($related = true){
@@ -94,7 +101,7 @@ file_put_contents($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DI
 	}
 
 
-	public function getProductsPage($page = 1, $itemsPerPage = 4){
+	public function getProductsPage($page = 1, $itemsPerPage = 15){
 		
 		$start = ($page-1) * $itemsPerPage;
 
@@ -141,7 +148,7 @@ file_put_contents($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DI
 	}
 
 
-	public static function getUsersPage($page = 1, $itemsPerPage = 10){
+	public static function getCategoriesPage($page = 1, $itemsPerPage = 15){
 		
 		$start = ($page-1) * $itemsPerPage;
 
@@ -157,7 +164,7 @@ file_put_contents($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DI
 		];
 	}
 
-	public static function getUsersPageSearch($search, $page = 1, $itemsPerPage = 15){
+	public static function getCategoriesPageSearch($search, $page = 1, $itemsPerPage = 15){
 		
 		$start = ($page-1) * $itemsPerPage;
 

@@ -24,7 +24,7 @@ class Cart extends Model {
 
 			if(!(int)$cart->getidcart() > 0){
 				$data = [
-					'dessesionid'=>session_id()
+					'dessessionid'=>session_id()
 				];
 
 				if(User::checkLogin(false)) {
@@ -50,8 +50,8 @@ class Cart extends Model {
 	public function getFromSessionID(){
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * FROM tb_carts WHERE dessesionid = :dessesionid",[
-			":dessesionid"=>session_id()
+		$results = $sql->select("SELECT * FROM tb_carts WHERE dessessionid = :dessessionid",[
+			":dessessionid"=>session_id()
 		]);
 
 		if(count($results) > 0){
@@ -72,11 +72,14 @@ class Cart extends Model {
 	}
 
 	public function save(){
+
+		User::createLog("Novo carrinho salvo");
+
 		$sql = new Sql();
 
-		$results = $sql->select("CALL sp_carts_save(:idcart, :dessesionid, :iduser, :deszipcode, :vlfreight, :nrdays)", [
+		$results = $sql->select("CALL sp_carts_save(:idcart, :dessessionid, :iduser, :deszipcode, :vlfreight, :nrdays)", [
 			":idcart"=>$this->getidcart(), 
-			":dessesionid"=>$this->getdessesionid(), 
+			":dessessionid"=>$this->getdessessionid(), 
 			":iduser"=>$this->getiduser(), 
 			":deszipcode"=>$this->getdeszipcode(), 
 			":vlfreight"=>$this->getvlfreight(), 
@@ -87,11 +90,14 @@ class Cart extends Model {
 	}
 
 	public function update(){
+
+		User::createLog("Carrinho atualizado");
+
 		$sql = new Sql();
 
-		$results = $sql->select("CALL sp_carts_save(:idcart, :dessesionid, :iduser, :deszipcode, :vlfreight, :nrdays)", [
+		$results = $sql->select("CALL sp_carts_save(:idcart, :dessessionid, :iduser, :deszipcode, :vlfreight, :nrdays)", [
 			":idcart"=>$this->getidcart(), 
-			":dessesionid"=>$this->getdessesionid(), 
+			":dessessionid"=>$this->getdessessionid(), 
 			":iduser"=>$this->getiduser(), 
 			":deszipcode"=>$this->getdeszipcode(), 
 			":vlfreight"=>$this->getvlfreight(), 
@@ -170,6 +176,7 @@ class Cart extends Model {
 	}
 
 	public function setFreight($nrzipcode){
+
 		$nrzipcode = str_replace('-', '', $nrzipcode);
 
 		$totals = $this->getProductsTotals();
@@ -203,9 +210,11 @@ class Cart extends Model {
 
 			if($result->MsgErro != ''){
 				Cart::setMsgError($result->MsgErro);
+				User::createLog($result->MsgErro);
 			}
 			else{
 				Cart::cleanMsgError();
+				User::createLog("Frete Calculado com Sucesso");
 			}
 
 			$this->setnrdays($result->PrazoEntrega);

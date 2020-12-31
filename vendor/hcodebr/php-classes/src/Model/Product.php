@@ -4,6 +4,7 @@ namespace Hcode\Model;
 
 use \Hcode\DB\Sql;
 use \Hcode\Model;
+use \Hcode\Model\User;
 use \Hcode\Mailer;
 
 class Product extends Model {
@@ -42,6 +43,8 @@ class Product extends Model {
 
 		$this->setData($results[0]);
 
+		User::createLog("Novo produto salvo com sucesso");
+
 	}
 
 	public function get($idproduct){
@@ -61,6 +64,7 @@ class Product extends Model {
 		));
 
 		Product::updateFile();
+		User::createLog("Produto excluído com sucesso");		
 	}
 
 	public function checkPhoto(){
@@ -141,23 +145,23 @@ class Product extends Model {
 			]);
 	}
 
-	public static function getUsersPage($page = 1, $itemsPerPage = 10){
+	public static function getProductsPage($page = 1, $itemsPerPage = 15, $orderby = "desproduct"){
 		
 		$start = ($page-1) * $itemsPerPage;
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT SQL_CALC_FOUND_ROWS * FROM tb_products ORDER BY desproduct LIMIT $start, $itemsPerPage");
+		$results = $sql->select("SELECT SQL_CALC_FOUND_ROWS * FROM tb_products ORDER BY $orderby DESC LIMIT $start, $itemsPerPage");
 		$resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
 
 		return[
-			'data'=>$results,
+			'data'=>Product::checkList($results),
 			'total'=>(int)$resultTotal[0]["nrtotal"],
 			'pages'=>ceil($resultTotal[0]["nrtotal"]/$itemsPerPage)
 		];
 	}
 
-	public static function getUsersPageSearch($search, $page = 1, $itemsPerPage = 15){
+	public static function getProductsPageSearch($search, $page = 1, $itemsPerPage = 15, $orderby = "desproduct"){
 		
 		$start = ($page-1) * $itemsPerPage;
 
@@ -166,7 +170,7 @@ class Product extends Model {
 		$results = $sql->select("SELECT SQL_CALC_FOUND_ROWS * 
 			FROM tb_products
 			WHERE desproduct LIKE :search OR desurl LIKE :search OR vlprice = :price
-			ORDER BY desproduct LIMIT $start, $itemsPerPage", [
+			ORDER BY $orderby DESC LIMIT $start, $itemsPerPage", [
 				":search"=>"%" . $search . "%",
 				":price"=>$search
 			]);
@@ -174,7 +178,7 @@ class Product extends Model {
 		$resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
 
 		return[
-			'data'=>$results,
+			'data'=>Product::checkList($results),
 			'total'=>(int)$resultTotal[0]["nrtotal"],
 			'pages'=>ceil($resultTotal[0]["nrtotal"]/$itemsPerPage)
 		];

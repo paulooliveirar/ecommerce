@@ -2,6 +2,7 @@
 
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
+use \Hcode\Model\Conf;
 use \Hcode\Model\Order;
 use \Hcode\Model\OrderStatus;
 
@@ -36,7 +37,7 @@ $app->get("/admin/orders/:idorder/status", function($idorder){
 	$page->setTpl("order-status", [
 		"order"=>$order->getValues(),	
 		"status"=>OrderStatus::listAll(),
-		"msgSuccess"=>Order::getSucess(),		
+		"msgSuccess"=>Order::getSuccess(),		
 		"msgError"=>Order::getError()
 	]);
 
@@ -62,7 +63,7 @@ $app->post("/admin/orders/:idorder/status", function($idorder){
 
 	$order->save();
 
-	Order::setSucess("Status atualizado com sucesso!");
+	Order::setSuccess("Status atualizado com Successo!");
 
 	header("Location: /admin/orders/" . $idorder . "/status");
 	exit;
@@ -79,13 +80,38 @@ $app->get("/admin/orders/:idorder", function($idorder){
 	$order->get((int)$idorder);
 
 	$cart = $order->getCart();
+	
+	$conf = new Conf();
+
+	$conf = $conf->getConf();
+
+	$array_conf = [];
+
+	$keys = [];
+
+	foreach((array)$conf as $data)
+	{
+		if(is_array($data))
+		{
+			foreach($data as $key => $other_data)
+			{
+				array_push($keys, $key);
+				array_push($array_conf, $other_data);
+			}
+		}
+	}
+
+	$array_conf = array_combine($keys, $array_conf);
+
+	//var_dump($order->getValues());
 
 	$page = new PageAdmin();
 
 	$page->setTpl("order", [
 		"order"=>$order->getValues(),
 		"cart"=>$cart->getValues(),
-		"products"=>$cart->getProducts()
+		"products"=>$cart->getProducts(),
+		"conf"=>$array_conf
 	]);
 
 });
@@ -96,14 +122,17 @@ $app->get("/admin/orders", function(){
 
 	$search = (isset($_GET['search'])) ? $_GET['search']: "";
 	$page = (isset($_GET['page'])) ? $_GET['page']: 1;
+	$orderspage = (isset($_GET['orders-page']) && $_GET['orders-page'] != "") ? $_GET['orders-page']: 15;
+
+	$allorders = count(Order::listAll());
 
 	if($search != ""){
-		$pagination = Order::getUsersPageSearch($search, $page);
+		$pagination = Order::getOrdersPageSearch($search, $page, $orderspage);
 	} else{
-		$pagination = Order::getUsersPage($page);
+		$pagination = Order::getOrdersPage($page, $orderspage);
 	}
 
-	//$pagination = User::getUsersPage($page, passar o número máximo por página);
+	//$pagination = User::getOrdersPage($page, passar o número máximo por página);
 	$pages = [];
 
 	for($x = 0; $x < $pagination["pages"]; $x++){
@@ -121,7 +150,9 @@ $app->get("/admin/orders", function(){
 	$page->setTpl("orders", [
 		"orders"=>$pagination['data'],
 		"search"=>$search,
-		"pages"=>$pages
+		"pagination"=>$orderspage,
+		"pages"=>$pages,
+		"allorders"=> $allorders
 	]);
 
 });

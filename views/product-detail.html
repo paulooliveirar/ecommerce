@@ -16,8 +16,12 @@
             <div class="col-md-12">
                 <div class="product-content-right">
                     <div class="product-breadcroumb">
-                        <a href="/">Home</a>
-                        <a href="">{$product.desproduct}</a>
+                        <nav aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{$product.desproduct}</li>
+                          </ol>
+                        </nav>                    
                     </div>
                     
                     <div class="row">
@@ -33,7 +37,8 @@
                             <div class="product-inner">
                                 <h2 class="product-name">{$product.desproduct}</h2>
                                 <div class="product-inner-price">
-                                    <ins>R${function="format_price($product.vlprice)"}</ins>
+                                    <h3>R${function="format_price($product.vlprice)"}</h3>
+                                    <ins>ou em até 5x de R${function="format_price($product.vlprice, 5)"} sem juros</ins>
                                 </div>    
                                 
                                 <form action="/cart/{$product.idproduct}/add" class="cart">
@@ -44,50 +49,75 @@
                                 </form>   
                                 
                                 <div class="product-inner-category">
-                                    <p>Categorias: {loop="$categories"} <a href="/categories/{$value.idcategory}">{$value.descategory}</a>{/loop}.
-                                </div> 
-                                
-                                <div role="tabpanel">
-                                    <ul class="product-tab" role="tablist">
-                                        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Descrição</a></li>
-                                        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Avaliações</a></li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div role="tabpanel" class="tab-pane fade in active" id="home">
-                                            <h2>Descrição do Produto</h2>  
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tristique, diam in consequat iaculis, est purus iaculis mauris, imperdiet facilisis ante ligula at nulla. Quisque volutpat nulla risus, id maximus ex aliquet ut. Suspendisse potenti. Nulla varius lectus id turpis dignissim porta. Quisque magna arcu, blandit quis felis vehicula, feugiat gravida diam. Nullam nec turpis ligula. Aliquam quis blandit elit, ac sodales nisl. Aliquam eget dolor eget elit malesuada aliquet. In varius lorem lorem, semper bibendum lectus lobortis ac.</p>
+                                    <p>Categoria(s): {loop="$categories"} <a href="/categories/{$value.idcategory}">{$value.descategory}</a>{/loop}.
+                                    </div> 
 
-                                            <p>Mauris placerat vitae lorem gravida viverra. Mauris in fringilla ex. Nulla facilisi. Etiam scelerisque tincidunt quam facilisis lobortis. In malesuada pulvinar neque a consectetur. Nunc aliquam gravida purus, non malesuada sem accumsan in. Morbi vel sodales libero.</p>
-                                        </div>
-                                        <div role="tabpanel" class="tab-pane fade" id="profile">
-                                            <h2>Reviews</h2>
-                                            <div class="submit-review">
-                                                <p><label for="name">Name</label> <input name="name" type="text"></p>
-                                                <p><label for="email">Email</label> <input name="email" type="email"></p>
-                                                <div class="rating-chooser">
-                                                    <p>Your rating</p>
+                                    <div role="tabpanel">
+                                        <ul class="product-tab" role="tablist">
+                                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Descrição</a></li>
+                                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Avaliações</a></li>
+                                            <li role="presentation"><a href="#review" aria-controls="review" role="tab" data-toggle="tab">Avaliar</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div role="tabpanel" class="tab-pane fade in active" id="home">                                   
+                                                <h2>Descrição do Produto</h2>  
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tristique, diam in consequat iaculis, est purus iaculis mauris, imperdiet facilisis ante ligula at nulla. Quisque volutpat nulla risus, id maximus ex aliquet ut. Suspendisse potenti. Nulla varius lectus id turpis dignissim porta. Quisque magna arcu, blandit quis felis vehicula, feugiat gravida diam. Nullam nec turpis ligula. Aliquam quis blandit elit, ac sodales nisl. Aliquam eget dolor eget elit malesuada aliquet. In varius lorem lorem, semper bibendum lectus lobortis ac.</p>
 
-                                                    <div class="rating-wrap-post">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
+                                                <p>Mauris placerat vitae lorem gravida viverra. Mauris in fringilla ex. Nulla facilisi. Etiam scelerisque tincidunt quam facilisis lobortis. In malesuada pulvinar neque a consectetur. Nunc aliquam gravida purus, non malesuada sem accumsan in. Morbi vel sodales libero.</p>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane fade" id="profile">
+                                                <div class="col-md-12 no-comments">
+                                                    Nenhum Comentário deste item.
+                                                    <a href="#review" aria-controls="review" role="tab" data-toggle="tab">Seja o primeiro a comentar!</a>
+                                                </div>
+                                                {loop="$review"}
+                                                <script type="text/javascript">document.getElementsByClassName("no-comments")[0].style.display = 'none';</script>
+                                                <div class="col-md-12 comments">
+                                                    <div class="col-md-2">
+                                                        <img src="{$value.desphoto}" />
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <h4 style="margin: 0">{$value.destitle}</h4>
+                                                        <p>
+                                                            <h5 style="margin: 0">{$value.desperson}</h5>
+                                                            <small>{function="format_date($value.dtregister)"}</small>
+                                                        </p>
+                                                        <p>{$value.desreview}</p>
+                                                        <div class="rating-box">
+                                                            <div class="rating" style="width:{$value.nrreview}%"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <p><label for="review">Your review</label> <textarea name="review" id="" cols="30" rows="10"></textarea></p>
-                                                <p><input type="submit" value="Submit"></p>
+                                                <hr>
+                                                {/loop}
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane fade" id="review">                           
+                                                <div class="submit-review">
+                                                    <p><label for="name">Name</label> <input name="name" type="text"></p>
+                                                    <p><label for="email">Email</label> <input name="email" type="email"></p>
+                                                    <div class="rating-chooser">
+                                                        <p>Nota</p>
+                                                        <div class="rating2">
+                                                            <span class="rating-star" data-value="5"></span>
+                                                            <span class="rating-star" data-value="4"></span>
+                                                            <span class="rating-star" data-value="3"></span>
+                                                            <span class="rating-star" data-value="2"></span>
+                                                            <span class="rating-star" data-value="1"></span>
+                                                        </div>                                                    
+                                                    </div>
+                                                    <p><label for="review">Seu Depoimento</label> <textarea name="review" id="" cols="30" rows="10"></textarea></p>
+                                                    <p><input type="submit" value="Enviar"></p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
-                                
                             </div>
                         </div>
-                    </div>
-                    
-                </div>                    
+
+                    </div>                    
+                </div>
             </div>
         </div>
     </div>
-</div>

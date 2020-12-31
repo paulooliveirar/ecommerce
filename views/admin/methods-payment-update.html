@@ -1,0 +1,114 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Editar Dados do {$payment.desname} 
+      <small>
+        ({$payment.descompany}) - Status: 
+        {if="$payment.inactive === '0'"}
+        <i class="fa fa-circle text-danger"></i> DESATIVADO
+        {/if}
+        {if="$payment.inactive === '1'"}
+        <i class="fa fa-circle text-success"></i> ATIVADO
+        {/if}            
+      </small> 
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <div class="row">
+     <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            <img class="img-circle" src='../../res/admin/dist/img/payment/{function="getNamePayment($payment.desname)"}.png' alt="{$payment.desname}">
+            <small>{$payment.desresume}</small>
+
+          </h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->     
+        <form role="form" action="/admin/methods-payment/update" method="post" enctype="multipart/form-data">
+          <div class="box-body">
+            {if="$error != ''"}
+            <div class="alert alert-danger">
+              {$error}
+            </div>              
+            {/if} 
+
+            {if="$success != ''"}
+            <div class="alert alert-success">
+              {$success}              
+            </div>
+            {/if}
+            <h3>Produção
+              <small> - Status: 
+                {if="$payment.sandbox === '0'"}
+                <i class="fa fa-circle text-success"></i> ATIVADO
+                {/if}
+                {if="$payment.sandbox === '1'"}
+                <i class="fa fa-circle text-danger"></i> DESATIVADO
+                {/if}  
+              </small>
+            </h3>
+            <div class="form-group">
+              <label for="deslogin">Login</label>
+              <input type="text" class="form-control" id="deslogin" name="deslogin" value="{$payment.deslogin}">
+            </div>
+            <div class="form-group">
+              <label for="despassword">Senha</label>
+              <input type="password" class="form-control" id="despassword" name="despassword" value="{$payment.despassword}">
+            </div>            
+
+            <h3>SandBox
+              <small> - Status: 
+                {if="$payment.sandbox === '0'"}
+                <i class="fa fa-circle text-danger"></i> DESATIVADO
+                {/if}
+                {if="$payment.sandbox === '1'"}
+                <i class="fa fa-circle text-success"></i> ATIVADO
+                {/if}  
+              </small></h3>
+
+              {if="$payment.sandbox === '0'"}
+              <a href="/admin/methods-payment/{$payment.idmethod}/{$payment.sandbox}" class="btn btn-success" onclick="return confirm('Tem certeza que deseja ATIVAR esse método de Pagamento')">
+                <i class="fa fa-toggle-on"></i>                        
+                Ativar
+              </a>
+            </p>
+            {/if}
+            {if="$payment.sandbox === '1'"}
+            <a href="/admin/methods-payment/{$payment.idmethod}/{$payment.sandbox}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja DESATIVAR esse método de Pagamento')">
+              <i class="fa fa-toggle-off"></i>
+              Desativar
+            </a>
+          </p>
+          {/if}
+
+          <div class="form-group">
+            <label for="desloginsandbox">Login</label>
+            <input type="text" class="form-control" id="desloginsandbox" name="desloginsandbox" value="{$payment.desloginsandbox}">
+          </div>
+          <div class="form-group">
+            <label for="despasswordsandbox">Senha</label>
+            <input type="password" class="form-control" id="despasswordsandbox" name="despasswordsandbox" value="{$payment.despasswordsandbox}">
+          </div>             
+
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <a href="/admin/methods-payment"><button type="button" class="btn btn-primary">Cancelar</button></a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

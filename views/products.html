@@ -1,0 +1,105 @@
+<div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2>Novidades</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container-fluid">
+        <div class="col-md-2">
+            <div class="row">
+                <form action="/products">
+                   <label for="orderby"><h3>Filtrar por: </h3> <h5>{$orderby}</h5></label>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" name="orderby">
+                        <option value="desproduct">Nome</option>
+                        <option value="vlprice">Preço</option>
+                        <option value="dtregister">Data de Postagem</option>
+                    </select>
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default" style="margin-left:20px;">Filtrar</button>
+                    </div>
+                </form>                
+            </div>
+        </div>            
+        <div class="row" style="margin-top:20px">
+            <h3>Categorias</h3>
+            <div class="list-group">
+                {loop="$categories"}
+                <button type="button" class="list-group-item button-radius animated fadeInRight" style="margin: 5px 0 5px 0; border-radius:0;">
+                    <a href="/categories/{$value.idcategory}" style="display: inline-block;">
+                        <span class="icon"></span>{$value.descategory}</a>
+                </button>
+                {/loop}
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px">
+            <h3>Tags</h3>
+            {loop="$categories"}
+                <button type="button" class="btn" style="margin-top:10px">
+                    {$value.descategory}
+                </button>
+            {/loop}
+        </div>
+    </div>
+    <div class="col-md-8 col-md-offset-1">
+        <div class="row">
+          <form action="/products">
+            Total de Resultados Exibidos por Página:  {$pagination}
+            <div class="input-group input-group-sm pull-right" style="width: 150px;margin-bottom: 30px">                
+              <input type="text" name="products-page" class="form-control pull-left" value="{$pagination}">
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-default">Visualizar</button>               
+              </div>
+            </div>
+          </form>             
+        </div>
+        <div class="row">
+            {loop="$products"}
+            <div class="col-md-3 col-sm-6">
+                <div class="single-shop-product">
+                    <div class="product-upper">
+                        <a href="/products/{$value.desurl}">
+                            <img src="{$value.desphoto}" alt="">
+                        </a>
+                    </div>                    
+                    <h2><a href="/products/{$value.desurl}">{$value.desproduct}</a></h2>
+                    <div class="rating-box">
+                        <div class="rating" style="width:100%"></div>
+                    </div>
+                    <div class="product-carousel-price">
+                        <ins>R${function="format_price($value.vlprice)"}</ins>
+                    </div>  
+
+                    <div class="product-option-shop">
+                        <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/cart/{$value.idproduct}/add">Comprar</a>
+                    </div>                       
+                </div>
+            </div>
+            {/loop}
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-pagination text-center">
+                    <nav>
+                        <ul class="pagination">
+                            {loop="$pages"}
+                            {if="$value.text !='1'"}
+                            <li><a href="{$value.link}">{$value.text}</a></li>
+                            {/if}                                
+                            {/loop}
+                        </ul>
+                    </nav>                        
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+</div>

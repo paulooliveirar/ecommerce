@@ -11,11 +11,14 @@ $app->get("/admin/categories", function(){
 
 	$search = (isset($_GET['search'])) ? $_GET['search']: "";
 	$page = (isset($_GET['page'])) ? $_GET['page']: 1;
+	$categoriespage = (isset($_GET['categories-page']) && $_GET['categories-page'] != "") ? $_GET['categories-page']: 15;
+
+	$allcategories = count(Category::listAll());		
 
 	if($search != ""){
-		$pagination = Category::getUsersPageSearch($search, $page);
+		$pagination = Category::getCategoriesPageSearch($search, $page, $categoriespage);
 	} else{
-		$pagination = Category::getUsersPage($page);
+		$pagination = Category::getCategoriesPage($page, $categoriespage);
 	}
 
 	//$pagination = User::getUsersPage($page, passar o número máximo por página);
@@ -37,7 +40,9 @@ $app->get("/admin/categories", function(){
 	$page->setTpl("categories", array(
 		"categories"=>$pagination['data'],
 		"search"=>$search,
-		"pages"=>$pages
+		"pagination"=>$categoriespage,
+		"pages"=>$pages,
+		"allcategories"=> $allcategories	
 	));
 });
 

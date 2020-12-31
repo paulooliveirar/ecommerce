@@ -7,6 +7,7 @@ use \Hcode\Model\Cart;
 use \Hcode\Model\User;
 use \Hcode\Model\Address;
 use \Hcode\Model\Order;
+use \Hcode\Model\Review;
 use \Hcode\Model\OrderStatus;
 
 $app->get('/', function() {
@@ -49,17 +50,73 @@ $app->get('/categories/:idcategory', function($idcategory){
 
 });
 
+$app->get('/products', function(){
+
+	$search = (isset($_GET['search'])) ? $_GET['search']: "";
+	$page = (isset($_GET['page'])) ? $_GET['page']: 1;
+	$orderby = (isset($_GET['orderby'])) ? $_GET['orderby']: "dtregister";
+
+	switch ($orderby) {
+		case 'desproduct': $orderbytext = "Nome do Produto";  break;
+		case 'vlprice': $orderbytext = "Valor do Produto";  break;
+		case 'dtregister': $orderbytext = "Data de Postagem";  break;
+	}
+
+	$productspage = (isset($_GET['products-page']) && $_GET['products-page'] != "" &&  $_GET['products-page'] >= 20) ? $_GET['products-page']: 20;
+
+	$allproducts = count(Product::listAll());
+	$categories = Category::listAll();
+
+	if($search != ""){
+		$pagination = Product::getProductsPageSearch($search, $page, $productspage, $orderby);
+	} else{
+		$pagination = Product::getProductsPage($page, $productspage, $orderby);
+	}
+
+	//$pagination = User::getUsersPage($page, passar o número máximo por página);
+	$pages = [];
+
+	for($x = 0; $x < $pagination["pages"]; $x++){
+		array_push($pages, [
+			"link"=>"/products?" . http_build_query([
+				"page"=>$x+1,
+				"search"=>$search,
+				"orderby"=>$orderby
+			]),
+			"text"=>$x+1
+		]);
+	}
+
+	$page = new Page();
+
+	$page->setTpl("products", [
+		"products"=>$pagination["data"],
+		"pages"=>$pages,
+		"search"=>$search,
+		"pagination"=>$productspage,
+		"allproducts"=> $allproducts,
+		"categories"=>$categories,
+		"orderby"=>$orderbytext		
+	]);
+
+});
+
 $app->get('/products/:desurl', function($desurl){
 
 	$product = new Product();
 
 	$product->getFromURL($desurl);
 
+	$review = new Review();
+
+	$review = $review->getProduct($product->getidproduct());
+
 	$page = new Page();
 
 	$page->setTpl("product-detail",[
 		"product"=>$product->getValues(),
-		"categories"=>$product->getCategories()
+		"categories"=>$product->getCategories(),
+		"review"=>$review
 	]);
 
 });
@@ -171,7 +228,7 @@ $app->post('/login', function(){
 		User::setError($e->getMessage());
 	}
 
-	header("Location: /checkout");
+	header("Location: /checkout_transparente");
 	exit;
 });
 
@@ -226,7 +283,7 @@ $app->post('/register', function(){
 
 	User::login($_POST['email'], $_POST['password']);
 
-	header("Location: /checkout");
+	header("Location: /checkout_transparente");
 	exit;
 });
 
@@ -297,7 +354,7 @@ $app->get("/profile",function(){
 
 	$page->setTpl("profile", [
 		"user"=>$user->getValues(),
-		"profileMsg"=>User::getSucess(),
+		"profileMsg"=>User::getSuccess(),
 		"profileError"=>User::getError()
 	]);
 });
@@ -337,14 +394,18 @@ $app->post("/profile",function(){
 
 	$_SESSION[User::SESSION] = $user->getValues();
 
-	User::setSucess("Dados Salvos com Sucesso!");
+	User::setSuccess("Dados Salvos com Successo!");
 
 	header("Location: /profile");
 	exit;
 });
 
-
-$app->get('/checkout', function(){
+/*
+********************************************************************************************************************************
+**** CODIGO USADO PARA CHECKOUT NORMAL - UTILIZAR O CÓDIGO ABAIXO QUANDO NÃO FOR NECESSÁRIO O CHECKOUT TRANSPARENTE OU SEJA ****
+**** QUANDO CLIENTE OPTAR PELO PAGAMENTO DIRETO NO SITE DO SEU GATEWAY DE PAGAMENTO 										****
+********************************************************************************************************************************
+$app->get('/checkout_transparente', function(){
 
 	User::verifyLogin(false);
 
@@ -381,7 +442,7 @@ $app->get('/checkout', function(){
 
 	$page = new Page();
 
-	$page->setTpl("checkout", [
+	$page->setTpl("checkout_transparente", [
 		"cart"=>$cart->getValues(),
 		"products"=>$cart->getProducts(),
 		"address"=>$address->getValues(),
@@ -389,50 +450,50 @@ $app->get('/checkout', function(){
 	]);
 });
 
-$app->post("/checkout", function(){
+$app->post("/checkout_transparente", function(){
 
 	User::verifyLogin(false);
 
 
 	if(!isset($_POST['zipcode']) || $_POST['zipcode']  === ''){
 		Address::setMsgError("Informe o seu CEP.");
-		header("Location: /checkout");
+		header("Location: /checkout_transparente");
 		exit;
 	}
 
 	if(!isset($_POST['desaddress']) || $_POST['desaddress']  === ''){
 		Address::setMsgError("Preencha o seu endereço.");
-		header("Location: /checkout");
+		header("Location: /checkout_transparente");
 		exit;		
 	}
 
 	if(!isset($_POST['desdistrict']) || $_POST['desdistrict']  === ''){
 		Address::setMsgError("Preencha o seu bairro.");
-		header("Location: /checkout");
+		header("Location: /checkout_transparente");
 		exit;		
 	}
 
 	if(!isset($_POST['descity']) || $_POST['descity']  === ''){
 		Address::setMsgError("Preencha a sua cidade.");
-		header("Location: /checkout");
+		header("Location: /checkout_transparente");
 		exit;		
 	}
 
 	if(!isset($_POST['desstate']) || $_POST['desstate']  === ''){
 		Address::setMsgError("Preencha o seu estado.");
-		header("Location: /checkout");
+		header("Location: /checkout_transparente");
 		exit;		
 	}
 
 	if (!isset($_POST['descountry']) || $_POST['descountry'] === '') {
 		Address::setMsgError("Informe o país.");
-		header('Location: /checkout');
+		header('Location: /checkout_transparente');
 		exit;
 	}	
 
 	if (!isset($_POST['desnumber']) || $_POST['desnumber'] === '') {
 		Address::setMsgError("Informe o número de sua residência.");
-		header('Location: /checkout');
+		header('Location: /checkout_transparente');
 		exit;
 	}		
 
@@ -612,7 +673,7 @@ $app->get("/boleto/:idorder", function($idorder){
 	require_once($path . "funcoes_itau.php");
 	require_once($path . "layout_itau.php");
 });
-
+*/
 $app->get("/profile/orders", function(){
 
 	User::verifyLogin(false);
@@ -656,7 +717,7 @@ $app->get("/profile/change-password", function(){
 
 	$page->setTpl("profile-change-password", [
 		"changePassError"=>User::getError(),
-		"changePassSuccess"=>User::getSucess()
+		"changePassSuccess"=>User::getSuccess()
 	]);
 
 });
@@ -707,7 +768,7 @@ $app->post("/profile/change-password", function(){
 
 	$user->update();
 
-	User::setSucess("Senha alterada com sucesso!");
+	User::setSuccess("Senha alterada com Successo!");
 
 	header("Location: /profile/change-password");
 	exit;
